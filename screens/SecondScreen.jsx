@@ -15,13 +15,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "#222831",
+    
+    
   },
+  
   title: {
     fontSize: 24,
     fontWeight: "bold",
+    color: "#00ADB5",
   },
   description: {
+    color: "#EEEEEE",
     fontSize: 18,
     marginTop: 10,
   },
