@@ -6,6 +6,7 @@ import { Picker } from "@react-native-picker/picker";
 const HomeScreen = ({ navigation }) => {
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
   const [category, setCategory] = useState("Genel"); 
 
   const addTask = () => {
@@ -16,12 +17,26 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const toggleTask = (id) => {
-    setTasks(tasks.map(task => task.id === id ? { ...task, completed: !task.completed } : task));
+    setTasks((prevTasks) => {
+      // Görevi bul ve tamamlandığını değiştir
+      const updatedTasks = prevTasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      );
+      return updatedTasks; // Güncellenen görevleri döndür
+    });
   };
 
   const removeTask = (id) => {
     setTasks(tasks.filter(task => task.id !== id));
   };
+
+  const goToCompletedTasks = () => {
+    const completedTasks = tasks.filter(task => task.completed);
+    console.log("Tamamlanan Görevler:", completedTasks);
+    setCompletedTasks(completedTasks);
+    navigation.navigate("Second", { completedTasks });
+  };
+  
 
   return (
     <View style={styles.container}>
@@ -71,7 +86,7 @@ const HomeScreen = ({ navigation }) => {
       </Picker>
 
       <FlatList
-        data={tasks}
+        data={tasks.filter(task => !task.completed)}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.taskContainer}>
@@ -89,9 +104,9 @@ const HomeScreen = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.navigateButton}
-        onPress={() => navigation.navigate("Second")}
+        onPress={goToCompletedTasks}
       >
-        <Text style={styles.navigateText}>İkinci Sayfaya Git</Text>
+        <Text style={styles.navigateText}>Tamamlanan Görevler</Text>
       </TouchableOpacity>
     </View>
   );

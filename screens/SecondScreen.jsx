@@ -1,35 +1,35 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 
-const SecondScreen = () => {
+const SecondScreen = ({ route }) => {
+  const { completedTasks } = route.params || { completedTasks: [] };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>İkinci Sayfa</Text>
-      <Text style={styles.description}>Bu, ikinci sayfanın içeriğidir.</Text>
+      <Text style={styles.title}>✅ Tamamlanan Görevler</Text>
+      {completedTasks.length === 0 ? (
+        <Text style={styles.emptyText}>Tamamlanmış görev bulunmamaktadır.</Text>
+      ) : (
+        <FlatList
+          data={completedTasks}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.taskContainer}>
+              <Text style={styles.taskText}>{item.text} ({item.category})</Text>
+            </View>
+          )}
+        />
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#222831",
-    
-    
-  },
-  
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#00ADB5",
-  },
-  description: {
-    color: "#EEEEEE",
-    fontSize: 18,
-    marginTop: 10,
-  },
+  container: { flex: 1, padding: 20, backgroundColor: "#222831" },
+  title: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 20, color: "white" },
+  emptyText: { color: "white", textAlign: "center", fontSize: 16, marginTop: 20 },
+  taskContainer: { padding: 15, backgroundColor: "#393E46", marginBottom: 10, borderRadius: 8 },
+  taskText: { fontSize: 18, color: "white" },
 });
 
 export default SecondScreen;
